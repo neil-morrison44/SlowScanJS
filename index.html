@@ -9,14 +9,23 @@
 	}
 	
 </script>
+<style type="text/css">
+	#canvas{
+		image-rendering:-webkit-optimize-contrast;
+		image-rendering: optimize-contrast
+		width:256;
+		height:256;
+	}
+</style>
 </header>
 <body onload="init()">
-<canvas width=128 height=128></canvas>
+<canvas width=128 height=128 id='canvas'></canvas>
 <br>
 <input type=text value="" id="File"/>
 <input type=button value="Load File"/>
+
 <br>
 <div id="output">Hi</div><br>
-<audio id="audio" src="SoundFiles/youtubeu3k6Xt30Z7g.mp3" controls></audio>
+<audio defaultPlaybackRate="0.1" id="audio" src="SoundFiles/youtubeu3k6Xt30Z7g.mp3" controls ></audio>
 </body>
 </html>
