@@ -9,6 +9,7 @@ var canvas;
 
 var playback = 0.1;
 var step = 60/120/10; //rough time in milliseconds for each pixel
+step = 0.001;
 //var step = 10;
 var shademin;
 var shademax;
@@ -72,7 +73,8 @@ function newLine(){
 }
 var liner;
 function showFreq() {
-	window.setTimeout('showFreq()',step);
+	if (!audioElement.paused){
+		window.setTimeout('showFreq()',step);}
 	if (liner == undefined){
 		liner = window.setInterval('newLine()', (frametime/120));}
 	// New typed array for the raw frequency data
@@ -102,7 +104,7 @@ function showFreq() {
 		y = 0;
 		x = 0;
 		window.clearInterval(liner);
-		liner = undefined;
+		liner = window.setInterval('newLine()', (frametime/120))
 	}
 	
 	x += res;
