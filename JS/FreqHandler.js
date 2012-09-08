@@ -9,8 +9,7 @@ var canvas;
 
 var playback = 0.1;
 var step = 60/120/10; //rough time in milliseconds for each pixel
-step = 0.001;
-//var step = 10;
+var step = 0;
 var shademin;
 var shademax;
 function drawPixel(x,y,shade,reso){
@@ -72,42 +71,45 @@ function newLine(){
 
 }
 var liner;
+//var imax; var max;
+var freqData;
+
 function showFreq() {
 	if (!audioElement.paused){
 		window.setTimeout('showFreq()',step);}
-	if (liner == undefined){
-		liner = window.setInterval('newLine()', (frametime/120));}
+	else{
+		window.clearInterval(liner);
+	}
 	// New typed array for the raw frequency data
-	audioElement.PlaybackRate  = 0.5;
-	var freqData = new Uint8Array(analyser.frequencyBinCount);
+	//audioElement.PlaybackRate  = 0.5; fails for some reason :(
+	if (freqData == undefined){
+		freqData = new Uint8Array(analyser.frequencyBinCount);}
 	// Put the raw frequency into the newly created array
-	//console.log('tested');
 	analyser.getByteFrequencyData(freqData);
-	var number = -1;
 	var imax = 0;
 	var max = 0;
-	//console.log(freqData.length);
-	for (var i = 0; i < freqData.length; i++){
+	//seems to be a gain just going between 40 and 120 - but not much of a gain
+	for (var i = 40; i < 120; i++){
 		if (freqData[i] > max){
 			max = freqData[i];
 			imax = i;
 		}
 		}
 	
-	drawPixel(x,y,imax,res);
+	drawPixel(x,y,imax,res/audioElement.playbackRate);
 	//60 seems to indicate a freq lower than 1200Hz
 	//though this'll be a problem if I ever catch a Horiz sync
-	if (imax < 60){
+	if (imax < 60 || audioElement.paused){
 		//frametime = (new Date()).getTime() - lasttime;
 		//lasttime = frametime;
 		//outputElement.innerHTML = frametime;
 		y = 0;
 		x = 0;
 		window.clearInterval(liner);
-		liner = window.setInterval('newLine()', (frametime/120))
+		liner = window.setInterval('newLine()', (frametime/120)/audioElement.playbackRate);
 	}
 	
-	x += res;
+	x += res/audioElement.playbackRate;
 	//outputElement.innerHTML = timediff;
 	
 }
