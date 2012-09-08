@@ -8,7 +8,7 @@ var y = 0;
 var canvas;
 
 var playback = 0.1;
-var step = 8/(120*120)*100; //rough time in milliseconds for each pixel
+var step = 60/120/10; //rough time in milliseconds for each pixel
 //var step = 10;
 var shademin;
 var shademax;
@@ -50,22 +50,37 @@ function showFreqAsWeGo(fileName){
 	console.log(audioElement.defaultPlaybackRate);
 	}
 	
-var lasttime = 0;
+
 var date = new Date();
-var timediff = 'hi';
+var frametime = 8000;
 var time = date.getTime();
+var lasttime = time;
 var res = 1;
 var tr = 7;
+
+function newLine(){
+	if (x < 120){
+		res++;
+	}
+	if (x > 120){
+		res--;
+	}
+	x = 0;
+	outputElement.innerHTML = "Resolution: " + res
+	y++;
+
+}
+var liner;
 function showFreq() {
 	window.setTimeout('showFreq()',step);
+	if (liner == undefined){
+		liner = window.setInterval('newLine()', (frametime/120));}
 	// New typed array for the raw frequency data
 	audioElement.PlaybackRate  = 0.5;
 	var freqData = new Uint8Array(analyser.frequencyBinCount);
 	// Put the raw frequency into the newly created array
 	//console.log('tested');
 	analyser.getByteFrequencyData(freqData);
-	// Clear the canvas
-	outputElement.innerHTML = "";
 	var number = -1;
 	var imax = 0;
 	var max = 0;
@@ -77,20 +92,20 @@ function showFreq() {
 		}
 		}
 	
-	x += res;
-	if (x >= 120){
-		x = 0;
-		y++;
-		time = (new Date()).getTime()
-		timediff = time - lasttime;
-		lasttime = time;
-		res = timediff/tr;
-	}
-	if (y == 120 || imax < 60){
+	drawPixel(x,y,imax,res);
+	//60 seems to indicate a freq lower than 1200Hz
+	//though this'll be a problem if I ever catch a Horiz sync
+	if (imax < 60){
+		//frametime = (new Date()).getTime() - lasttime;
+		//lasttime = frametime;
+		//outputElement.innerHTML = frametime;
 		y = 0;
 		x = 0;
+		window.clearInterval(liner);
+		liner = undefined;
 	}
-	drawPixel(x,y,imax,res);
-	outputElement.innerHTML = timediff;
+	
+	x += res;
+	//outputElement.innerHTML = timediff;
 	
 }
