@@ -8,7 +8,7 @@ var y = 0;
 var canvas;
 
 var playback = 0.1;
-var step = 8/(128*128)*100; //rough time in milliseconds for each pixel
+var step = 8/(120*120)*100; //rough time in milliseconds for each pixel
 //var step = 10;
 var shademin;
 var shademax;
@@ -21,7 +21,8 @@ function drawPixel(x,y,shade,reso){
 	}
 	shade -=shademin;
 	shade = (shade/shademax)*256;*/
-	shade = shade*2;
+	shade -= 50.0;
+	shade = shade*3;
 	//shade = 256 -shade;
 	canvas.fillStyle = 'rgb('+shade+','+shade+','+shade+')';
 	canvas.fillRect(x,y,reso,1);
@@ -54,6 +55,7 @@ var date = new Date();
 var timediff = 'hi';
 var time = date.getTime();
 var res = 1;
+var tr = 7;
 function showFreq() {
 	window.setTimeout('showFreq()',step);
 	// New typed array for the raw frequency data
@@ -76,15 +78,15 @@ function showFreq() {
 		}
 	
 	x += res;
-	if (x >= 128){
+	if (x >= 120){
 		x = 0;
 		y++;
 		time = (new Date()).getTime()
 		timediff = time - lasttime;
 		lasttime = time;
-		res = timediff/6;
+		res = timediff/tr;
 	}
-	if (y == 128 || imax < 60){
+	if (y == 120 || imax < 60){
 		y = 0;
 		x = 0;
 	}
