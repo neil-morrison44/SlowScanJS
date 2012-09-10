@@ -9,21 +9,11 @@ var canvas;
 
 var playback = 0.1;
 var step = 60/120/10; //rough time in milliseconds for each pixel
-var step = 0;
-var shademin;
-var shademax;
+var step = 0; //just run as fast as we can
+
 function drawPixel(x,y,shade,reso){
-	/*if ( shademax == undefined || shade > shademax){
-		shademax = shade;
-	}
-	if ( shademin == undefined || shade < shademin){
-		shademin = shade;
-	}
-	shade -=shademin;
-	shade = (shade/shademax)*256;*/
 	shade -= 50.0;
 	shade = shade*3;
-	//shade = 256 -shade;
 	canvas.fillStyle = 'rgb('+shade+','+shade+','+shade+')';
 	canvas.fillRect(x,y,reso,1);
 }
@@ -73,8 +63,9 @@ function newLine(){
 var liner;
 //var imax; var max;
 var freqData;
-
+var prevfreq;
 function showFreq() {
+	var pb = audioElement.playbackRate;
 	if (!audioElement.paused){
 		window.setTimeout('showFreq()',step);}
 	else{
@@ -96,20 +87,20 @@ function showFreq() {
 		}
 		}
 	
-	drawPixel(x,y,imax,res/audioElement.playbackRate);
+	drawPixel(x,y,imax,res);
 	//60 seems to indicate a freq lower than 1200Hz
 	//though this'll be a problem if I ever catch a Horiz sync
-	if (imax < 60 || audioElement.paused){
+	if ((imax < 60 && prevfreq < 60)|| audioElement.paused){
 		//frametime = (new Date()).getTime() - lasttime;
 		//lasttime = frametime;
 		//outputElement.innerHTML = frametime;
 		y = 0;
 		x = 0;
 		window.clearInterval(liner);
-		liner = window.setInterval('newLine()', (frametime/120)/audioElement.playbackRate);
+		liner = window.setInterval('newLine()', (frametime/120)/pb);
 	}
-	
-	x += res/audioElement.playbackRate;
+	prevfreq = imax;
+	x += res;
 	//outputElement.innerHTML = timediff;
 	
 }
