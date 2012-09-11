@@ -8,21 +8,43 @@ function findCodex(){
 	}
 	//console.log(codexBlips);
 	findStarts();
-	TestPrintFrame();
 }
 
+
+function clearCanvas(){
+	canvas.clearRect(0,0,120,120);
+}
 var frameStarts = [];
 function TestPrintFrame(){
+	clearCanvas();
 	var x = 0;
 	var y = 0;
 	//console.log('ftest');
 	for (var i = 0; i < TimeArray.length -1 && y < 120; i++){
 		//console.log('p');
-		drawPixel(x,y,TimeArray[i].f,1);
-		x++;
-		if (x == 120){
-			x = 0;
-			y++;
+		if(frameStarts[select.value] <= TimeArray[i].t){
+			drawPixel(x,y,TimeArray[i].f,1);
+			x++;
+			if (x == 120){
+				x = 0;
+				y++;
+			}
+			//if we're not on the last fame and we've gone past the start of the next frame then stop somehow
+			if((select.value != frameStarts.length) && (frameStarts[select.value + 1] >= TimeArray[i].t)){
+				y = 120;
+			}
+		}
+	}
+}
+
+function cleanStarts(){
+	var i = 0;
+	while( i < frameStarts.length - 1){
+		if(Math.ceil(frameStarts[i]) == Math.ceil(frameStarts[i+1])){
+			frameStarts.splice(i,1);
+		}
+		else{
+			i++;
 		}
 	}
 }
@@ -33,4 +55,22 @@ function findStarts(){
 		if((TimeArray[i-2].f < 60) && (TimeArray[i-1].f < 60) && (TimeArray[i].f < 60) && (TimeArray[i+1].f > 60)){
 			frameStarts.push(TimeArray[i].t);}
 	}
+	cleanStarts();
+	updateFrameSelect();
 }
+var select;
+function updateFrameSelect(){
+	select = document.getElementById("frameSelect");
+	select.options.length = 0;
+	for (i in frameStarts){
+		console.log(frameStarts[i]);
+		select.options[select.options.length]  = new Option("Frame "+select.options.length+"",i);
+	}
+}
+
+
+
+
+
+
+

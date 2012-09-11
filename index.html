@@ -14,11 +14,21 @@
 	
 </script>
 <style type="text/css">
-	#canvas{
+	canvas{
 		image-rendering:-webkit-optimize-contrast;
 		image-rendering: optimize-contrast;
 		width:360;
 		height:360;
+	}
+	#frameSelect{
+		position:absolute;
+		top:360;
+		left:360;
+	}
+	#drawFrame{
+		position:absolute;
+		top:380;
+		left:360;
 	}
 </style>
 </header>
@@ -27,7 +37,15 @@
 <br>
 <input type=text value="" id="File"/>
 <input type=button value="Load File"/><br>
-<input type=button value="Determine Codex" onclick="findCodex()"/><br><div id="codex"></div>
+<input type=button value="Determine Codex" onclick="findCodex()"/><div id="codex"></div>
+<input type=button id="drawFrame" value="DrawFrame" onclick="TestPrintFrame()"/>
+
+<select id="frameSelect">
+  <option value="0">Frame 0</option>
+  <option value="1">Frame 1</option>
+  <option value="2">Frame 2</option>
+  <option value="3">Frame 3</option>
+</select>
 <br>
 <div id="output">Hi</div><br>
 <audio defaultPlaybackRate="0.1" id="audio" src="SoundFiles/youtubeu3k6Xt30Z7g.mp3" controls ></audio>
