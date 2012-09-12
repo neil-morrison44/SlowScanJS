@@ -57,6 +57,7 @@ function showFreq() {
 		window.setTimeout('showFreq()',step);}
 	else{
 		TimeArray.sort(sortArray);
+		findCodex();
 	}
 	// New typed array for the raw frequency data
 	if (freqData == undefined){
