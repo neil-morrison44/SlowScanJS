@@ -6,7 +6,7 @@ var source;
 var x = 0;
 var y = 0;
 var canvas;
-
+var canvasElement;
 
 var playback = 0.1;
 var step = 0; //just run as fast as we can
@@ -21,19 +21,12 @@ function sortArray(a,b){
 	return a.t-b.t;
 	
 }
-function getFrameData(num){
-	
-}
-function drawPixel(x,y,shade,reso){
-	shade -= 50.0;
-	shade = shade*3;
-	canvas.fillStyle = 'rgb('+shade+','+shade+','+shade+')';
-	canvas.fillRect(x,y,reso,1);
-}
-function showFreqAsWeGo(fileName){
+
+function init(){
 	// The audio element
 	audioElement = document.getElementById('audio');
 	outputElement = document.getElementById('output');
+	canvasElement = document.getElementById('canvas');
 	canvas = document.getElementById('canvas').getContext('2d');
 	// Create new Audio Context and an audio analyzer
 	audioContext = new webkitAudioContext();

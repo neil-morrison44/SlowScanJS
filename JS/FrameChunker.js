@@ -11,9 +11,7 @@ function findCodex(){
 }
 
 
-function clearCanvas(){
-	canvas.clearRect(0,0,120,120);
-}
+
 var frameStarts = [];
 function TestPrintFrame(){
 	clearCanvas();
@@ -30,7 +28,7 @@ function TestPrintFrame(){
 				y++;
 			}
 			//if we're not on the last fame and we've gone past the start of the next frame then stop somehow
-			if((select.value != frameStarts.length) && (frameStarts[select.value + 1] >= TimeArray[i].t)){
+			if((select.value != frameStarts.length - 1) && (frameStarts[parseInt(select.value) + 1] <= TimeArray[i].t)){
 				y = 120;
 			}
 		}
